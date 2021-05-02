@@ -1,0 +1,68 @@
+# -*- mode: yaml; coding: utf-8 -*-
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nxfilter
+  labels:
+   app: nxfilter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nxfilter
+  selector:
+    matchLabels:
+      app: nxfilter
+  template:
+    metadata:
+      labels:
+        app: nxfilter
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      nodeSelector:
+        node-role.kubernetes.io/worker: worker         
+      containers:
+      - name: nxfilter
+        image: k3s-master-1:5000/nxfilter:v0.6
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "4000Mi"
+            cpu:    "4"
+          requests:
+            memory: "3500Mi"
+            cpu:    "2"
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        volumeMounts:
+        - name: nxfilter-conf
+          mountPath: /nxfilter/conf
+          readOnly: false
+        - name: nxfilter-log
+          mountPath: /nxfilter/log
+          readOnly: false
+        - name: nxfilter-db
+          mountPath: /nxfilter/db
+          readOnly: false
+      volumes:
+      - name: nxfilter-conf
+        persistentVolumeClaim:
+          claimName: nxfilter-conf-claim
+      - name: nxfilter-log
+        persistentVolumeClaim:
+          claimName: nxfilter-log-claim
+      - name: nxfilter-db
+        persistentVolumeClaim:
+          claimName: nxfilter-db-claim
+      terminationGracePeriodSeconds: 30

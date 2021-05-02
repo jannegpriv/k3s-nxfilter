@@ -1,0 +1,26 @@
+# -*- mode: yaml; coding: utf-8 -*-
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nxfilter
+  labels:
+    app: nxfilter
+spec:
+  selector:
+    app: nxfilter
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 80
+      name: nxfilter-http
+    - port: 8443
+      protocol: TCP
+      targetPort: 443
+      name: nxfilter-https
+    - port: 53
+      protocol: UDP
+      targetPort: 53
+      name: nxfilter-dns
+  externalIPs:
+    - 192.168.50.70
