@@ -5,7 +5,7 @@ metadata:
     app: nxfilter
   name: nxfilter-conf-claim
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage-nxfilter"
 spec:
   accessModes:
     - ReadWriteOnce
@@ -20,7 +20,7 @@ metadata:
     app: nxfilter
   name: nxfilter-log-claim
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage-nxfilter"
 spec:
   accessModes:
     - ReadWriteOnce
@@ -35,7 +35,7 @@ metadata:
     app: nxfilter 
   name: nxfilter-db-claim
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage-nxfilter"
 spec:
   accessModes:
     - ReadWriteOnce

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner-nxfilter
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-client-provisioner-nxfilter
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner-nxfilter
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner-nxfilter
+    spec:
+      serviceAccountName: nfs-client-provisioner-nxfilter
+      containers:
+        - name: nfs-client-provisioner-nxfilter
+          image: quay.io/external_storage/nfs-client-provisioner-arm:latest
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: nfs-storage-nxfilter
+            - name: NFS_SERVER
+              value: 192.168.50.50
+            - name: NFS_PATH
+              value: /media/SEAGATE/kubernetes/nfs/nxfilter
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 192.168.50.50
+            path: /media/SEAGATE/kubernetes/nfs/nxfilter
